@@ -1,0 +1,170 @@
+﻿# 🌐 HTTPS Remote Setup Guide (Step-by-Step)
+
+
+इस गाइड में हम सीखेंगे कि HTTPS और Personal Access Token (PAT) का इस्तेमाल करके अपने फोन/टर्मिनल को GitHub से कैसे जोड़ते हैं और पुश करते समय आने वाली एरर को कैसे ठीक करते हैं।
+
+
+---
+
+
+## 📌 Step 1: Personal Access Token (PAT) बनाना
+
+
+GitHub पर सुरक्षा के कारण नॉर्मल पासवर्ड से काम नहीं होता, इसलिए हमें Token बनाना पड़ता है:
+
+
+1. Chrome में GitHub.com खोलें और लॉगिन करें।
+
+
+2. अपनी Profile Photo ➔ Settings पर जाएँ।
+
+
+3. सबसे नीचे बाएँ तरफ Developer settings पर जाएँ।
+
+
+4. Personal access tokens ➔ Tokens (classic) पर क्लिक करें।
+
+
+5. Generate new token (classic) चुनें।
+
+
+6. Note: में नाम लिखें (जैसे: Termux-Token) और Expiration सेट करें।
+
+
+7. repo वाले मुख्य बॉक्स पर Tick (✔) लगाएँ।
+
+
+8. नीचे जाकर Generate token दबाएँ और उस Token को कॉपी करके कहीं सुरक्षित रख लें।
+
+
+---
+
+
+## 📌 Step 2: Local Project में HTTPS Remote जोड़ना
+
+
+अपने Termux में प्रोजेक्ट फोल्डर के अंदर रहकर यह कमांड चलाएँ:
+
+
+1. git remote add https-test https://github.com/<username>/<repo-name>.git
+
+
+   * मतलब: अपने GitHub रिपॉजिटरी के लिंक को एक नाम (जैसे https-test) देना।
+
+
+
+
+
+
+
+
+---
+
+
+## 💡 Important Note: Remote Name (origin vs https-test)
+
+
+* **`origin` क्या है?** यह Git का डिफ़ॉल्ट नाम (Nickname) होता है। जब आप पहली बार रिपॉजिटरी जोड़ते हैं, तो Git अपने आप उसे `origin` नाम दे देता है।
+
+
+* **हमने `https-test` क्यों लिखा?** क्योंकि हमारे पास पहले से SSH कनेक्शन `origin` नाम से जुड़ा हुआ था। अगर हम फिर से `origin` लिखते तो एरर आती। इसलिए हमने HTTPS को अलग से टेस्ट करने के लिए इसका नाम `https-test` रखा।
+
+
+* **निष्कर्ष:** आप `origin` की जगह `my-repo`, `https-link` या अपनी पसंद का कोई भी नाम लिख सकते हैं। यह सिर्फ लिंक का एक उपनाम (Alias) है।
+
+
+—
+
+
+
+
+
+
+
+
+2. git remote -v
+
+
+   * मतलब: चेक करना कि कौन-कौन से रिमोट लिंक जुड़े हैं।
+
+
+---
+
+
+## 📌 Step 3: HTTPS से Code/Notes Push करना
+
+
+1. git push https-test main
+
+
+2. टर्मिनल आपसे पूछेगा:
+
+
+   * Username: अपना GitHub यूज़रनेम डालें (जैसे Digitsou)।
+
+
+   * Password: अपना नॉर्मल पासवर्ड न डालें। Step 1 में कॉपी किया गया Personal Access Token (PAT) पेस्ट करें।
+
+
+   * (नोट: पेस्ट करते समय स्क्रीन पर कुछ दिखता नहीं है, बस पेस्ट करके Enter दबा दें)।
+
+
+---
+
+
+## ⚠️ Common Problem & Solution (जो एरर आई थी)
+
+
+### 🔴 Problem: [rejected] main -> main (fetch first)
+
+
+* कारण: GitHub पर ब्राउज़र से अपलोड की हुई कोई फाइल मौजूद थी, जो आपके Termux (Local) में नहीं थी।
+
+
+* समाधान (Fix): पुश करने से पहले GitHub की नई फाइलों को अपने पास सिंक करें:
+
+
+1. git pull https-test main
+
+
+   * मतलब: GitHub की नई फाइलों को नीचे खींचकर अपने फोल्डर में मिलाना।
+
+
+2. git push https-test main
+
+
+   * मतलब: अब आसानी से पुश हो जाएगा!
+
+
+---
+
+
+## 💡 बार-बार Token डालने से कैसे बचें?
+
+
+अगर आप चाहते हैं कि Git आपका Token याद रखे:
+
+
+* git config --global credential.helper store
+  (यह कमांड चलाने के बाद Git दोबारा कभी आपसे Token नहीं पूछेगा)
+
+
+---
+
+
+## 📚 Key Terminologies (मुख्य तकनीकी शब्दावली)
+
+
+* HTTPS: डेटा भेजने का एक सुरक्षित वेब रास्ता।
+
+
+* PAT (Personal Access Token): पासवर्ड की जगह इस्तेमाल होने वाली स्पेशल चाबी।
+
+
+* Remote Name (e.g., origin, https-test): आपके GitHub सर्वर लिंक का एक छोटा नाम या उपनाम (Nickname)।
+
+
+* Git Pull: सर्वर की नई चीज़ों को अपने फोन में लाना।
+
+
+* Git Push: अपने फोन की चीज़ों को सर्वर पर भेजना।
